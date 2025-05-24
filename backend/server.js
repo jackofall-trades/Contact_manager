@@ -27,6 +27,8 @@ const cors = require("cors"); */
 // });
 //gonna use something else instead of the above code
 app.use("/api/contacts", require("./routes/contactRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
