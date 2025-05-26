@@ -60,32 +60,35 @@ const loginUser = asyncHandler(async  (req, res) => {
     const user = await User.findOne({ email });
     //compare password with hashed password
     if (user && (await bcrypt.compare(password, user.password))) {
-        //create token
-        const accesstoken = jwt.sign(
-            { userId: user.id },
-            process.env.JWT_SECRET,
-            { expiresIn: '30d' }
+        const accessToken = jwt.sign(
+            {
+                user: {
+                    userName: user.userName,
+                    email: user.email,
+                    id: user.id
+                }
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '1m' }
         );
-        res.status(200).json({
-            _id: user.id,
-            userName: user.userName,
-            email: user.email,
-            accesstoken
-        });
-        return;
-    } else {
-        res.status(401);
-        throw new Error("Invalid email or password");
+        res.status(200).json({ accessToken });
     }
+    else {
+        res.status(401);
+        throw new Error("Email or Password is not valid");
+    }
+    //if user is found and password matches, send success response
+    //if user is not found or password does not match, send error response
 
-    res.json({ message: 'User logged in successfully' });
+    //res.json({ message: 'User logged in successfully' });
 });
 
-//adesc Get current user
+//adesc Get current user information
 //@route GET /api/users/current
-//@access public
+//@access private
 const currentUser = asyncHandler(async (req, res) => {
-    res.json({ message: 'information about the current user' });
+    //res.json({ message: 'information about the current user' });
+    res.json(req.user);
 });
 
 module.exports = {
