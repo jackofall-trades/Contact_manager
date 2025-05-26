@@ -1,8 +1,8 @@
-const asyncHandler = require('express-async-handler');
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
+const asyncHandler = require("express-async-handler");
+const User = require("../models/userModel");
+const bcrypt = require("bcrypt");
 //bcrypt is used for hashing passwords
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 //jsonwebtoken is used for creating and verifying tokens
 
 //adesc Register a new user
@@ -23,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    //console.log('Hashed Password:', hashedPassword);  //just for checking if it works
+    //console.log("Hashed Password:", hashedPassword);  //just for checking if it works
     //create user
     const user = await User.create({
         userName,
@@ -31,7 +31,7 @@ const registerUser = asyncHandler(async (req, res) => {
         password: hashedPassword
     });
 
-    console.log('User created:', user); //just for checking if it works
+    console.log("User created:", user); //just for checking if it works
     if (user) {
         res.status(201).json({
             _id: user.id,
@@ -43,7 +43,7 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("User data is not valid");
     }
-    res.json({ message: 'User registered successfully' });
+    res.json({ message: "User registered successfully" });
 });
 
 
@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async  (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1m' }
+            { expiresIn: "15m" }
         );
         res.status(200).json({ accessToken });
     }
@@ -80,14 +80,14 @@ const loginUser = asyncHandler(async  (req, res) => {
     //if user is found and password matches, send success response
     //if user is not found or password does not match, send error response
 
-    //res.json({ message: 'User logged in successfully' });
+    //res.json({ message: "User logged in successfully" });
 });
 
 //adesc Get current user information
 //@route GET /api/users/current
 //@access private
 const currentUser = asyncHandler(async (req, res) => {
-    //res.json({ message: 'information about the current user' });
+    //res.json({ message: "information about the current user" });
     res.json(req.user);
 });
 
